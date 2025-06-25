@@ -1,21 +1,11 @@
-const mongoose = require('mongoose');
-const config = require('../config');
+require('dotenv').config();
+const mysql = require('mysql2/promise');
 
-const connectDB = async () => {
-  try {
-    const db = await mongoose.connect(config.MONGO_URI, {
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useFindAndModify: false,
-      useUnifiedTopology: true,
-    });
-    console.log('Successfully connected to MongoDB!');
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
+});
 
-    return db;
-  } catch (err) {
-    console.error(err.message);
-    process.exit(-1);
-  }
-};
-
-module.exports = connectDB;
+module.exports = pool;
